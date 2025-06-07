@@ -30,9 +30,12 @@ namespace List
             size = 0;
         }
 
-        private void Resize()
+        private void Resize(bool inc = true)
         {
-            cap *= 2;
+            if (inc)
+                cap *= 2;
+            else
+                cap /= 2;
             T[] newItems = new T[cap];
             for (int i = 0; i < size; i++)
             {
@@ -57,6 +60,7 @@ namespace List
             {
                 items[i] = items[i + 1];
             }
+            if (size < cap / 2) Resize(false);
         }
 
         public void Clear()
@@ -89,6 +93,7 @@ namespace List
             }
             return -1; 
         }
+
         public bool Contains(T item)
         {
             return IndexOf(item) != -1;
@@ -107,19 +112,31 @@ namespace List
 
         public bool Equals(FakeList<T>? other)
         {
-            if (other is null) return false;
+            if (other is null) {
+                return false;
+            }
 
-            if (Object.ReferenceEquals(this, other)) return true;
+            if (Object.ReferenceEquals(this, other)) {
+                return true;
+            }
 
-            if (this.GetType() != other.GetType()) return false;
+            if (this.GetType() != other.GetType()) {
+                return false;
+            }
 
-            if (this.Count != other.Count) return false;
+            if (this.Count != other.Count) {
+                return false;
+            }
 
-            if (this.Count == 0) return true;
+            if (this.Count == 0) {
+                return true;
+            }
 
             for (int i = 0; i < this.Count; i++)
             {
-                if (!this.items[i].Equals(other.items[i])) return false;
+                if (!this.items[i].Equals(other.items[i])) {
+                    return false;
+                }
             }
             return true;
 
@@ -127,7 +144,9 @@ namespace List
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (int i = 0; i < size; i++) yield return items[i];
+            for (int i = 0; i < size; i++) {
+                yield return items[i];
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -137,9 +156,15 @@ namespace List
 
         public void CopyTo(T[] array, int arrayIndex)
         {
-            if (array == null) throw new ArgumentNullException(nameof(array));
-            if (arrayIndex < 0 || arrayIndex >= array.Length) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-            if (array.Length < size - arrayIndex) throw new ArgumentException("Not enough space in the target array.");
+            if (array == null) {
+                throw new ArgumentNullException(nameof(array));
+            }
+            if (arrayIndex < 0 || arrayIndex >= array.Length) {
+                throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+            }
+            if (array.Length < size - arrayIndex) {
+                throw new ArgumentException("Not enough space in the target array.");
+            }
             for (int i = 0; i < size; i++)
             {
                 array[arrayIndex + i] = items[i];
