@@ -21,7 +21,7 @@ namespace List
 
         public bool IsReadOnly => false;
 
-        public T this[int index] { get => items[index]; set => throw new NotImplementedException(); }
+        public T this[int index] { get => items[index]; set => items[index] = value; }
 
         public FakeList(int capacity = 10)
         {
@@ -99,7 +99,7 @@ namespace List
             return IndexOf(item) != -1;
         }
 
-        public bool Remove(T item)
+       public bool Remove(T item)
         {
             int index = IndexOf(item);
             if (index == -1) return false;
